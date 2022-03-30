@@ -1,0 +1,25 @@
+{
+    "name": "arminmiraftab/managefile",
+    "description": "This package is for crud and managing files based on repository architecture",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Arminmiraftab\\ManageFile\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "arminmiraftab",
+            "email": "miraftab.armin@gmail.com"
+        }
+    ],
+    "require": {},
+    "extra":{
+        "laravel":{
+            "providers":[
+                "Arminmiraftab\\ManageFile\\Providers\\FileManagerServiceProvider"
+            ]
+
+        }
+    }
+}
