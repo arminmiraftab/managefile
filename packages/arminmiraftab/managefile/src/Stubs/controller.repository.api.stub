@@ -1,0 +1,99 @@
+<?php
+
+namespace {{NAMESPACE}};
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{{CLASS_NAME}}Request\{{REQUEST_STORE}};
+use App\Http\Requests\{{CLASS_NAME}}Request\{{UPDATE_REQUEST}};
+use App\Http\Resources\{{CLASS_NAME}}Resources\Index{{CLASS_NAME}}Resource;
+use App\Http\Resources\{{CLASS_NAME}}Resources\Store{{CLASS_NAME}}Resource;
+use App\Http\Resources\{{CLASS_NAME}}Resources\Update{{CLASS_NAME}}Resource;
+use \App\Repository\{{CLASS_NAME}}Repository\{{CLASS_NAME}}RepositoryInterface;
+use \App\Repository\Services\Helpers;
+use App\Repository\Services\PaginationResource;
+use App\Repository\Services\UploadImage;
+
+class {{CLASS_NAME}}Controller extends Controller
+{
+
+    use UploadImage;
+
+     /**
+     * @var{{VAR_INTERFACE}}RepositoryInterface
+     */
+    protected ${{VAR_INTERFACE}};
+
+    public function __construct( {{INTERFACE}} ${{VAR_INTERFACE}}){
+
+        $this->{{VAR_INTERFACE}} = ${{VAR_INTERFACE}};
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+       ${{VAR_INTERFACE}}= $this->{{VAR_INTERFACE}}->index();
+         return Helpers::isArrayReturn(
+         ${{VAR_INTERFACE}},Helpers::returnRequest(
+          new PaginationResource(${{VAR_INTERFACE}}
+          ,Index{{CLASS_NAME}}Resource::collection(${{VAR_INTERFACE}}))),'نتیجه ای یافت نشد');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store({{REQUEST_STORE}} $request)
+    {
+        $requestValid=$request->validated();
+        $requestValid['image']= $this->storeImage($request->file('image'));
+        ${{VAR_INTERFACE}}= $this->{{VAR_INTERFACE}}->store($requestValid);
+        return Helpers::isReturn(${{VAR_INTERFACE}},
+         Helpers::returnRequest(new Store{{CLASS_NAME}}Resource(${{VAR_INTERFACE}})),'نتیجه ای یافت نشد');
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update({{UPDATE_REQUEST}} $request, $id)
+    {
+            ${{VAR_INTERFACE}}=$this->{{VAR_INTERFACE}}->show($id);
+           if (${{VAR_INTERFACE}}){ $updated=$this->{{VAR_INTERFACE}}->update($request->validated(),$id);
+         return  Helpers::isReturn($updated,Helpers::returnRequest(new Update{{CLASS_NAME}}Resource($updated)),' ویرایش نشد');
+           }else{
+           return  Helpers::notFindRequest('نتیجه ای یافت نشد');
+           }
+      }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $deleted=$this->{{VAR_INTERFACE}}->destroy($id)
+         return Helpers::isReturn($deleted,Helpers::returnDestroy($deleted),' خذف نشد');
+    }
+}
